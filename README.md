@@ -10,7 +10,7 @@ Litecome is a simple messaging webapp
 id{PK}      |id{PK}     |id{PK}        |id{PK}         |id{PK}      |id{PK}          |
 Email       |type_id{FK}|Channel_id{FK}|Channel_id{FK} |name        |user_id{FK}     |
 Name        |created_at |Author_id{FK} |User_id{FK}    |            |friend_id{FK}   |
-Bio         |           |Content       |Joined_at      |            |created_at      |
+Bio         |Name       |Content       |Joined_at      |            |created_at      |
 Photo       |           |created_at    |Role_id{FK}    |            |status          |
 last_login  |           |reply_to{FK}  |               |            |                |
 is_online   |           |              |               |            |                |
