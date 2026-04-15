@@ -23,16 +23,16 @@ created_at  |           |              |               |            |           
 |       |
 |       |
 ### Data seed:
-Channel:{ global}
-Channel_type: {Dm, Group, Server}
-Role: {member, moderator}
+Channel:{ global}.
+Channel_type: {Dm, Group, Server}.
+Role: {member, moderator}.
 ## data actions(abstracted)
-*user actions:-
+* user actions:-
     - create a user
     - get user
     - edit user
 
-*channel actions:-
+* channel actions:-
     - create channel
     - get channels
     - get channel by id with messages and users
@@ -41,7 +41,7 @@ Role: {member, moderator}
     - leave channel
     - remove user from channel 
 
-*message actions:-
+* message actions:-
     - create message
     - edit message
     - delete message
@@ -59,14 +59,14 @@ Role: {member, moderator}
 
 
 ### (MVP)API
-[]-auth
+[]- auth
     - create user
     - login user
     - logout user
     - checks authorization for protected routes
-[]-index
-[]-user
-[]-messages
+[]- index
+[]- user
+[]- messages
 
 ### (optional features)
 []- contact list component
