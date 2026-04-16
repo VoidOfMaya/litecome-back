@@ -11,21 +11,15 @@ id{PK}      |id{PK}     |id{PK}        |id{PK}         |id{PK}      |id{PK}     
 Email       |type_id{FK}|Channel_id{FK}|Channel_id{FK} |name        |user_id{FK}     |
 Name        |created_at |Author_id{FK} |User_id{FK}    |            |friend_id{FK}   |
 Bio         |Name       |Content       |Joined_at      |            |created_at      |
-Photo       |           |created_at    |Role_id{FK}    |            |status          |
+Photo       |           |created_at    |Is_mod         |            |status (P/A/B)  |
 last_login  |           |reply_to{FK}  |               |            |                |
 is_online   |           |              |               |            |                |
 created_at  |           |              |               |            |                |
 
-| Role  |
-|-------|
-|id{PK} |
-|name   |
-|       |
-|       |
+
 ### Data seed:
 Channel:{ global}.
 Channel_type: {Dm, Group, Server}.
-Role: {member, moderator}.
 ## data actions(abstracted)
 * user actions:-
     - create a user
