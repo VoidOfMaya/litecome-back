@@ -1,61 +1,52 @@
 architecture tasks based on layers:
 ## Setup
-    [] Initialize Express server
+    [X] Initialize Express server
     [] Setup JWT strategy (Passport)
-    [] Setup Prisma (init + schema)
-    [] Create feature-based folder structure
+    [X] Setup Prisma (init + schema)
+    [X] Create feature-based folder structure
     [] Configure environment variables
 
 ## Database(prismaORM)
-[] Create models
+[X] Create models
 
-    [] User
+    [X] User
         - id
         - email
         - name
         - bio
         - photo
-        - last_login
-        - is_online
-        - is_mod (default: false)
-        - created_at
-
-    [] Frnd
+        - lastOnline
+        - isOnline
+        - createdAt
+    [X] UserFriends
         - id
-        - requester_id {FK → User.id}
-        - addressee_id {FK → User.id}
-        - status ("pending", "accepted", "rejected", "blocked")
-        - created_at
-        - updated_at
-
-    [] Chnl
+        - useriId {FK → User.id}
+        - friendId {FK → User.id}
+        - status ("PENDING", "ACTIVE", "BLOCKED")
+        - createdAt
+    [X] Channel
         - id
-        - type_id {FK → Chnl_type.id}
-        - created_at
-
-    [] Chnl_member
+        - type {"FRIENDS","GROUP"}
+        - createdAt
+        -name
+    [X] ChannelMember
         - id (or composite key)
-        - chnl_id {FK → Chnl.id}
-        - user_id {FK → User.id}
-        - joined_at
-
-    [] Chnl_type
+        - channelId {FK → Chnl.id}
+        - userId {FK → User.id}
+        - ismMod (default: false)
+        - joinedAt
+    [X] Message
         - id
-        - name ("dm", "group", "server")
-
-    [] Msg
-        - id
-        - chnl_id {FK → Chnl.id}
-        - author_id {FK → User.id}
+        - channelId {FK → Channel.id}
+        - userId {FK → User.id}
         - content
         - created_at
-        - reply_to {FK → Msg.id}
+        - reply_to {FK → Message.id}
 ## Migration & seed
-    [] Run initial migration
+    [X] Run initial migration
 
-    [] Seed data
-        [] chnl_type: {dm, group, server}
-        [] chnl: {global}
+    [X] Seed data
+        [X] channel: {global}
 ## Services
     []Authorization:-
         [] Only chnl members can access msgs
