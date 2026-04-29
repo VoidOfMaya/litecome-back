@@ -3,6 +3,7 @@
 ## Overview:
 Litecome is a simple messaging webapp
 
+
 ## Data model
 
 |User       | Channel   | Message      |Channel_members|Channel_type| User_Friends   | 

@@ -1,0 +1,37 @@
+{
+  "name": "chatter-backend",
+  "version": "1.0.0",
+  "description": "Litecome is a simple messaging webapp",
+  "homepage": "https://github.com/VoidOfMaya/litecome-back#readme",
+  "bugs": {
+    "url": "https://github.com/VoidOfMaya/litecome-back/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VoidOfMaya/litecome-back.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "jsonwebtoken": "^9.0.3",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+    "pg": "^8.20.0"
+  }
+}
