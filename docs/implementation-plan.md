@@ -45,8 +45,8 @@ architecture tasks based on layers:
 ## Migration & seed
     [X] Run initial migration
 
-    [X] Seed data
-        [X] channel: {global}
+    [X/pending production] Seed data
+        [X/pending production] channel: {global}
 ## Services
     []Authorization:-
         [] Only chnl members can access msgs

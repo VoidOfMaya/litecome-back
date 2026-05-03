@@ -1,7 +1,10 @@
 import express from 'express';
 import 'dotenv/config';
 import cors from 'cors';
-import { indexRouter } from './features/index/indexRouter.js';
+import { pipe } from './features/routerController.js';
+import { midware } from './features/middlewareController.js';
+import passport from 'passport';
+
 
 const app = express();
 
@@ -12,11 +15,12 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 //passport setup goes here:-
-
+midware.passportConfig();
+app.use(passport.initialize());
 
 //routs:-
-app.use('/',indexRouter) // this houses the read rout for post and comments Comment router will live here!
-
+app.use('/',pipe.indexRouter) // this houses the read rout for post and comments Comment router will live here!
+app.use('/auth', pipe.authRouter)
 
 
 //error handlers:

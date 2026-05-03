@@ -11,7 +11,17 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
-
+// security
+model RefreshToken{
+  id              String            @id @default(uuid())
+  token           String            @unique //is a hashed string
+  expiresAt       DateTime
+  createdAt       DateTime          @default(now())
+  revoked         Boolean           @default(false)
+  userId          Int
+  owner            User              @relation(fields: [userId], references: [id])
+}
+//app interactions
 model User{
   id              Int               @id @default(autoincrement())
   email           String            @unique
@@ -29,6 +39,8 @@ model User{
   //relations
   messages        Message[]
   channels        ChannelMember[]
+  //tokens and sexurity
+  refreshToken    RefreshToken[]
 }
 enum FriendshipStatus {
   PENDING
