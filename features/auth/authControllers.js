@@ -18,7 +18,8 @@ const loginController = async (req, res)=>{
     //validation handler
     const errors = validationResult(req);
     if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
-    const data = matchedData(req);   
+    const data = matchedData(req);  
+    console.log(data)
     //logic
     try{
         const user = await login(data);

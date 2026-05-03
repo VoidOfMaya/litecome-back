@@ -33,13 +33,12 @@ const register = async (data) =>{
 const login = async (data) =>{
     const {email, password} = data
     const user = await prisma.user.findUnique({
-        where: {email}
+        where: {email: email}
     })
     if(!user) throw new Error("invalid login");
-    
+
     const match = await bcrypt.compare(password, user.password);
     if(!match) throw new Error("invalid login");
-    
     //access token:-
     const accessToken = jwt.sign(
         {id: user.id, email: user.email},
@@ -47,7 +46,7 @@ const login = async (data) =>{
         {expiresIn: '15m'}
     )
     // refresh token:-
-    const refreshToken = await createRefreshToken(user.id)
+    const refreshToken = await createRefreshToken(user)
     return{
         user:{
             id: user.id,
@@ -63,7 +62,7 @@ const login = async (data) =>{
     }
 }
 // requires user id
-const createRefreshToken = async (userId)=>{
+const createRefreshToken = async (user)=>{
     const refreshToken = await bcrypt.hash(`${user.id}&${user.name}`,10);
     const oneWeek = 7 * 24 * 60 * 1000; //one week in milliseconds
     const experationDate = new Date(Date.now() + oneWeek);
@@ -72,7 +71,7 @@ const createRefreshToken = async (userId)=>{
             data:{
                 token: refreshToken,           
                 expiresAt: experationDate,                   
-                userId: userId
+                userId: Number(user.id)
             }
         })
         return refreshToken        

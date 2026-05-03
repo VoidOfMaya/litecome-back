@@ -92,10 +92,12 @@ architecture tasks based on layers:
 
 
 ## Authentication
-    []Register logic (hash password)
-    []Login logic (verify password)
-    []JWT generation
-    []JWT validation middleware
+    [X]Register logic (hash password)
+    [X]Login logic (verify password)
+    [X]JWT access token generation
+    []JWT access token validation middleware
+    []refresh token generation
+    []refresh token validation
 
 ## Input validation
     []register validation
