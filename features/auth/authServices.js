@@ -41,13 +41,13 @@ const login = async (data) =>{
     if(!match) throw new Error("invalid login");
     
     //access token:-
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
         {id: user.id, email: user.email},
         process.env.APIKEY,
         {expiresIn: '15m'}
     )
     // refresh token:-
-    
+    const refreshToken = await createRefreshToken(user.id)
     return{
         user:{
             id: user.id,
@@ -58,8 +58,28 @@ const login = async (data) =>{
             createdAt: user.createdAt,
             lastOnline: user.lastOnline
         },
-        token
+        accessToken,
+        refreshToken
     }
+}
+// requires user id
+const createRefreshToken = async (userId)=>{
+    const refreshToken = await bcrypt.hash(`${user.id}&${user.name}`,10);
+    const oneWeek = 7 * 24 * 60 * 1000; //one week in milliseconds
+    const experationDate = new Date(Date.now() + oneWeek);
+    try{
+        await prisma.refreshToken.create({
+            data:{
+                token: refreshToken,           
+                expiresAt: experationDate,                   
+                userId: userId
+            }
+        })
+        return refreshToken        
+    }catch(err){
+        throw new Error({message: err || 'token Generation issue'})
+    }
+
 }
 export{
     login,

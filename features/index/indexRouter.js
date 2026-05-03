@@ -1,5 +1,5 @@
 import { Router } from "express";
-
+import bcrypt from 'bcryptjs';
 const indexRouter = Router();
 
 indexRouter.get('/',async ()=>{
