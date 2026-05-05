@@ -40,8 +40,14 @@ const tokenController = async (req, res)=>{
     //if refresh token invalid return error
     try{
         const refreshToken = await validateRToken(req.body.rToken)
-        console.log(refreshToken)
-        res.status(201).json({token: refreshToken})
+        if(refreshToken){
+            console.log(req.user)
+            const newRToken = await createRToken(refreshToken.userId, refreshToken.token)
+            const newAToken = await createAToken(refreshToken.userId)
+            return res.status(201).json({aToken: newAToken, rToken: newRToken})
+        }
+        throw new Error('err: at token controller')
+
     }catch(err){
         console.log(err)
         res.status(err.status).json({code: err.code})

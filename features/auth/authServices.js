@@ -41,9 +41,9 @@ const login = async (data) =>{
     const match = await bcrypt.compare(password, user.password);
     if(!match) throw new Error("invalid login");
     //access token:-
-    const accessToken = createAToken(user);
+    const accessToken = await createAToken(user.id);
     // refresh token:-
-    const refreshToken = await createRToken(user)
+    const refreshToken = await createRToken(user.id)
     return{
         user:{
             id: user.id,
@@ -58,7 +58,10 @@ const login = async (data) =>{
         refreshToken
     }
 }
-const createAToken = (user)=>{
+const createAToken = async (userId)=>{
+    const user = await prisma.user.findUnique({
+        where:{id: Number(userId)}
+    });
     const accessToken = jwt.sign(
         {id: user.id, email: user.email},
         process.env.APIKEY,
@@ -67,19 +70,29 @@ const createAToken = (user)=>{
     return accessToken
 }
 // requires user object
-const createRToken = async (user)=>{
-
+const createRToken = async (userId, token=null)=>{
+    //creates a new token
     const refreshToken = crypto.randomBytes(32).toString('hex');
-    const oneWeek = 7 * 24 * 60 * 1000; //one week in milliseconds
+    const oneWeek = 7 * 24 * 60 * 60 * 1000; //one week in milliseconds
     const experationDate = new Date(Date.now() + oneWeek);
     try{
+        console.log(userId)
+        //creates new token
         await prisma.refreshToken.create({
             data:{
                 token: refreshToken,           
                 expiresAt: experationDate,                   
-                userId: user.id
+                userId: Number(userId),
+                revoked: false
             }
         })
+        //revokes old token if exists/ provided
+        if(token){
+            await prisma.refreshToken.update({
+                where: { token: token },
+                data: {revoked: true}
+            });
+        }
         return refreshToken        
     }catch(err){
         console.error("Token Generation Error:", err);
