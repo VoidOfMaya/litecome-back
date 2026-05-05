@@ -73,58 +73,66 @@ const createRToken = async (user)=>{
     const oneWeek = 7 * 24 * 60 * 1000; //one week in milliseconds
     const experationDate = new Date(Date.now() + oneWeek);
     try{
-        const getUserTokens = await prisma.refreshToken.findMany({
-            where: {
-                userId: user.id, 
-                revoked: false
-            },
-            data:{
-                revoked:true,
-            },
-        })
-        console.log(getUserTokens)
-        /*
         await prisma.refreshToken.create({
             data:{
                 token: refreshToken,           
                 expiresAt: experationDate,                   
-                userId: Number(user.id)
+                userId: user.id
             }
         })
-        */
         return refreshToken        
     }catch(err){
-        throw new Error({message: err || 'token Generation issue'})
+        console.error("Token Generation Error:", err);
+        throw new Error('Could not generate refresh token');
     }
-
 }
+//runs on /refresh
+
 const validateRToken = async (tokenString)=>{
     const rToken = await prisma.refreshToken.findUnique({
         where: { token: tokenString }
     });
 
-   
-    if (!rToken) return false;
-
+    if (!rToken){
+        const err = new Error("Missing refresh token");
+        err.status= 401
+        err.code = "NO_REFRESH_TOKEN";
+        throw err
+    }
     // If the token is already revoked
     if (rToken.revoked) {
         await prisma.refreshToken.updateMany({
             where: { userId: rToken.userId }, 
             data: { revoked: true }
         });
-        throw new Error('Security Breach: Token reuse detected');
+        const err = new Error('Security Breach: Token reuse detected');
+        err.status= 401
+        err.code = "TOKEN_REUSE_DETRECTED";
+        throw err
     }
-
-    //EXPIRATION CHECK
+    //expiration check
     const now = new Date();
     if (rToken.expiresAt < now) {
-        throw new Error('Token Expired');
+        await prisma.refreshToken.update({
+            where: {token: rToken.token},
+            data:{
+                revoked: true
+            }
+        })
+        const err = new Error(`token expired: ${rToken.expiresAt}`);
+        err.status= 401;
+        err.code = "OUTDATED_TOKEN"
+        throw err
+        
     }
-    //token is valid, not revoked, and not expired.
-    return true 
+    //returns a valid token object 
+    return rToken
 
 }
 export{
     login,
-    register
+    register,
+    createAToken,
+    createRToken,
+    validateRToken
 }

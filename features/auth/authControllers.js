@@ -1,5 +1,11 @@
 import { validationResult, matchedData } from "express-validator";
-import { register, login } from "./authServices.js";
+import { 
+    register, 
+    login, 
+    createAToken, 
+    createRToken,
+    validateRToken 
+    } from "./authServices.js";
 
 const newUserController = async (req, res) =>{
     //validation handler
@@ -28,7 +34,21 @@ const loginController = async (req, res)=>{
         res.status(500).json({error: err.message || 'Internal Server Error'})  
     }
 }
+// accepts Refresh token string,if valid derives user by token string
+const tokenController = async (req, res)=>{
+    //if refresh token valid  create new access token & refresh token
+    //if refresh token invalid return error
+    try{
+        const refreshToken = await validateRToken(req.body.rToken)
+        console.log(refreshToken)
+        res.status(201).json({token: refreshToken})
+    }catch(err){
+        console.log(err)
+        res.status(err.status).json({code: err.code})
+    }
+}
 export{
     newUserController,
-    loginController
+    loginController,
+    tokenController
 }
