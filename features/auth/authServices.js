@@ -76,6 +76,13 @@ const createRToken = async (userId, token=null)=>{
     const oneWeek = 7 * 24 * 60 * 60 * 1000; //one week in milliseconds
     const experationDate = new Date(Date.now() + oneWeek);
     try{
+        //revokes old token if exists/ provided
+        if(token){
+            await prisma.refreshToken.update({
+                where: { token: token },
+                data: {revoked: true}
+            });
+        }
         console.log(userId)
         //creates new token
         await prisma.refreshToken.create({
@@ -86,13 +93,6 @@ const createRToken = async (userId, token=null)=>{
                 revoked: false
             }
         })
-        //revokes old token if exists/ provided
-        if(token){
-            await prisma.refreshToken.update({
-                where: { token: token },
-                data: {revoked: true}
-            });
-        }
         return refreshToken        
     }catch(err){
         console.error("Token Generation Error:", err);
@@ -100,7 +100,6 @@ const createRToken = async (userId, token=null)=>{
     }
 }
 //runs on /refresh
-
 const validateRToken = async (tokenString)=>{
     const rToken = await prisma.refreshToken.findUnique({
         where: { token: tokenString }
@@ -142,10 +141,14 @@ const validateRToken = async (tokenString)=>{
     return rToken
 
 }
+const getUser = async (id) =>{
+    return await prisma.user.findUnique({where:{id: id}});
+}
 export{
     login,
     register,
     createAToken,
     createRToken,
-    validateRToken
+    validateRToken,
+    getUser
 }

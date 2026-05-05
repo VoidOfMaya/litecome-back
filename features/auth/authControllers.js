@@ -4,7 +4,8 @@ import {
     login, 
     createAToken, 
     createRToken,
-    validateRToken 
+    validateRToken, 
+    getUser
     } from "./authServices.js";
 
 const newUserController = async (req, res) =>{
@@ -44,7 +45,8 @@ const tokenController = async (req, res)=>{
             console.log(req.user)
             const newRToken = await createRToken(refreshToken.userId, refreshToken.token)
             const newAToken = await createAToken(refreshToken.userId)
-            return res.status(201).json({aToken: newAToken, rToken: newRToken})
+            const user = await getUser(refreshToken.userId)
+            return res.status(201).json({user ,accessToken: newAToken, refreshToken: newRToken})
         }
         throw new Error('err: at token controller')
 
