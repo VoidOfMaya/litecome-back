@@ -10,7 +10,19 @@ const passportConfig=()=>{
     }
     passport.use(new Strategy(options, async( payload, done)=>{
         try{
-            const user = await prisma.user.findUnique({where: {id: payload.id}});
+            const user = await prisma.user.findUnique({
+                where: {id: payload.id},
+                select:{
+                    id: true,
+                    email:true,
+                    name:true,
+                    bio:true,
+                    photo:true,
+                    lastOnline:true,
+                    isOnline: true,
+                    createdAt:true
+                }
+            });
             if(!user) return done(null, false);
             return done(null, user);
         }catch(err){
