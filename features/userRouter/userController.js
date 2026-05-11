@@ -24,8 +24,13 @@ const getCurrentUser = async (req, res)=>{
 }
 // edits and updates current user info
 const editCurrentUser = async (req, res)=>{
+    //validation handler
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const data = matchedData(req);  
+    console.log(data)
     try {
-        const newProfile = await service.editCurrentUser(req.user.id,req.body)
+        //const newProfile = await service.editCurrentUser(req.user.id,req.body)
         res.status(200).json({msg: 'updated successful'})
     } catch (err) {
         res.status(500).json({msg: err.message || 'internal server error'})      

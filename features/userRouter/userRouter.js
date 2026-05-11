@@ -9,7 +9,7 @@ userRouter.get('/me', controller.getDashboard)
 //gets current users profile
 userRouter.get('/me/profile', controller.getCurrentUser)
 // edits and updates current user info
-userRouter.put('/me/profile',controller.editCurrentUser)
+userRouter.put('/me/profile',validate.userEdit,controller.editCurrentUser)
 
 //=======[CURRENT USER TO OTHER USER]==========
 //gets other user profile by id!
