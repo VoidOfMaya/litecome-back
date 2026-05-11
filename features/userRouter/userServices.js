@@ -73,7 +73,7 @@ const populateDashboard = async (userId) =>{
     //requires data normalization
     return outboundData
 }
-const getcurrentUser= async(id)=>{
+const getUser= async(id)=>{
     return await prisma.user.findUnique({
         where:{id: id},
         select:{
@@ -101,7 +101,7 @@ const editCurrentUser = async( id, data) =>{
 }
 const service = {
     populateDashboard,
-    getcurrentUser,
+    getUser,
     editCurrentUser,
 }
 export{service}

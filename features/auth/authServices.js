@@ -160,12 +160,15 @@ const revokeRtoken = async (token)=>{
         }
     })
 }
-export{
+const service ={
     login,
     register,
     createAToken,
     createRToken,
     validateRToken,
     getUserById,
-    revokeRtoken
+    revokeRtoken    
+}
+export{
+    service
 }

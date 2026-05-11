@@ -1,13 +1,13 @@
 import{Router} from 'express';
-import { validateLogin,validateNewAccount } from '../../validations/indexValidation.js';
-import {newUserController, loginController, tokenController, logoutController} from './authControllers.js'
+import { validate } from '../../validations/indexValidation.js';
+import {controller} from './authControllers.js'
 const authRouter = Router()
-authRouter.post('/register', validateNewAccount, newUserController);
-authRouter.post('/login', validateLogin, loginController)
+authRouter.post('/register', validate.NewAccount, controller.newUser);
+authRouter.post('/login', validate.Login, controller.login)
 //logout revokes token on backend, delets  access token from frontend
-authRouter.post('/logout',logoutController)
+authRouter.post('/logout',controller.logout)
 // renew tokens
-authRouter.post('/refresh',tokenController)
+authRouter.post('/refresh',controller.token)
 
 
 export{
