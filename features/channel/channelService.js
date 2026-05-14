@@ -1,19 +1,27 @@
 import { prisma } from "../../lib/prisma.js"
-/*
-stand alone route:-
-    [X] createChnl
-    [] requestJoinChnl
-    [] getAllChnls (user-specific)
-    [X] getChnlById (with msgs + members)
-    [] leaveChnl
 
-    mod protected:-
-    [] enableModPrivByID
-    [] addUserToChnl (mod only)
-    [] removeUserFromChnl (mod only)
-
-*/
-const getChannel = async (id) =>{
+//gets channel info only for authenticated memebrs NO messages or members
+const getChannelInfo = async (id) =>{
+    const result = await prisma.channel.findUnique({
+        where: {id: id},
+        include:{
+            members:{
+                select:{
+                    user:{ select:{
+                            id: true,
+                            name: true,
+                            photo: true
+                        }
+                    }
+                }
+            },
+            messages: true,
+        }
+    })
+    return result
+}
+// ======[MEMBERS ONLY]============
+const getChannelbyId = async (id) =>{
     const result = await prisma.channel.findUnique({
         where: {id: id},
         include:{
@@ -48,11 +56,29 @@ const newChannel = async(creatorId, name)=>{
         }
     })
 }
-// mode protected
+const leaveChannel = async(channelId, userId) =>{
+    await prisma.channelMember.update({
+        where:{ 
+            AND:[
+                {channelId},
+                {userId}
+            ]
+        },
+        data:{
+            isMember: false,
+            isMod: false
+        }
+    })
+    return 'Connection Terminated'
+}
+// ======[MODS ONLY]============
 
 const service ={
     newChannel,
-    getChannel
+    getChannelbyId,
+    getChannelInfo,
+    leaveChannel
+
 }
 export{
     service

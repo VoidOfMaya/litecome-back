@@ -77,18 +77,26 @@ architecture tasks based on layers:
         [X] getcurrentuserDashboard
 
     []Channel services:-
-        [] createChnl
-        [X] createDmChnl (2 users only) * implemented into the accept friend request route
-        [] enableModPriv
-
-        [] getAllChnls (user-specific)
-        [] getChnlById (with msgs + members)
-
+        O-> authenticate routes
+        [X] createChnl
+        [X] createDmChnl (2 users only) * implemented into the accept friend request
+        [X] getAllChnls (user-specific)route
+        [X] getChnlById (without members , or message info)
         [] requestJoinChnl
-        [] addUserToChnl (mod only)
-
+ 
+        O-> channelMember routes
+        [X] getChnlById (with members , or message info)
         [] leaveChnl
-        [] removeUserFromChnl (mod only)
+
+        O-> moderated routes
+        [] getJoinRequests
+        [] getJoinRequstbyId
+        [] acceptRequest
+        [] rejectRequest
+
+        [] addUserToChnl (mod only)
+        [] enableModPriv
+        [] removeUserFromChnl
 
     []Message services:-
         []createMsg(is reply if og msg id provided)
@@ -117,7 +125,7 @@ architecture tasks based on layers:
     [X]register validation
     [X]login validation
     [X]user update validation
-    [] chnl creation validation
+    [X] chnl creation validation
     [] frnd request validation
     [] msg validation
 
@@ -182,6 +190,6 @@ architecture tasks based on layers:
 
 ## Middleware
     [X]requireAuth(rout protection)
-    []requireChnlMember(members only)
-    []requireMod
+    [X]requireChnlMember(members only)
+    [X]requireMod
 
