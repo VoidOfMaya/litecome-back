@@ -2,6 +2,7 @@ import { Router } from "express";
 import { controller } from "./channelController.js";
 import { validate } from "./channelValidation.js";
 import { authorize } from './premissions.js'
+import { messsageRouter } from "../messages/messageRouter.js";
 
 const channelRouter = Router({mergeParams: true});
 //premissions
@@ -24,6 +25,9 @@ channelRouter.put('/mod/rejectreq',validate.relation ,authorize.mod, controller.
 channelRouter.delete('/mod/removeuser',validate.relation,authorize.mod, controller.removeUser)// postman-tested
 channelRouter.post('/mod/newmod',validate.relation ,authorize.mod, controller.enableMod)// postman-tested
 
+//====== NESTED MESSAGE ROUTER==========
+
+channelRouter.use('/chatLog', messsageRouter);
 
 
 

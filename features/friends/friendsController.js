@@ -1,4 +1,5 @@
 import { service } from "./friendsService.js";
+import { matchedData, validationResult } from "express-validator";
 
 const getActiveFriends = async (req, res) =>{
     try {

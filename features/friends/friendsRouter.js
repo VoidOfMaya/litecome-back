@@ -16,7 +16,6 @@ friendRouter.delete('/',controller.endFriendship)
 //nested Dm channel router:-
 friendRouter.use('/:connectionId/dm', channelRouter);
 
-
 export{
     friendRouter
 }

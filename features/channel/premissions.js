@@ -1,12 +1,14 @@
 import { prisma } from "../../lib/prisma.js"
+import { validationResult, matchedData } from "express-validator";
 const member = async (req, res, next) =>{
-    const {id} = req.user
-    const {connectionId} = req.params
-    console.log(`user id: ${id}, connection id: ${connectionId}`)
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const {channelId} = matchedData(req); 
+    console.log(`user id: ${req.user.id}, connection id: ${channelId}`)
     const result = await prisma.channelMember.findFirst({
         where:{AND:[
-                {channelId: Number(connectionId)},
-                {userId: Number(id)}
+                {channelId:channelId},
+                {userId: Number(req.user.id)}
             ]   
         }
     })
@@ -16,13 +18,14 @@ const member = async (req, res, next) =>{
 }
 //validates both  membership and mod status as mode has to be a member!
 const mod = async (req, res, next) =>{
-    const {id} = req.user
-    const {connectionId} = req.params
-    console.log(`user id: ${id}, connection id: ${connectionId}`)
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const {channelId} = matchedData(req); 
+    console.log(`user id: ${req.user.id}, connection id: ${channelId}`)
     const result = await prisma.channelMember.findFirst({
         where:{AND:[
-                {channelId: Number(connectionId)},
-                {userId: Number(id)}
+                {channelId:channelId},
+                {userId: Number(req.user.id)}
             ]   
         }
     })
