@@ -3,18 +3,20 @@ import { validationResult, matchedData } from "express-validator"
 
 //======= AUTHENTICATED CONTROLLER===========
 const getChannelInfo = async (req, res) =>{
+    // data validation
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const data = matchedData(req); 
+    //main logic
     try {
-        const {connectionId} = req.params
-        console.log(connectionId)
-        const dm = await service.getChannelInfo(Number(connectionId))
+        const dm = await service.getChannelInfo(data.channelId)
         res.status(200).json(dm)
     } catch (err) {
         res.status(500).json({error: err.message || 'Internal Server Error'})
     }
 }
 const createNewChannel = async (req, res) =>{
-    //requires user id and a channel name
-    //validation handler
+
     const errors = validationResult(req);
     if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
     const data = matchedData(req);  
@@ -29,29 +31,39 @@ const createNewChannel = async (req, res) =>{
 }
 //======= MEMBERS CONTROLLER===========
 const getChannel = async (req, res) =>{
+    // data validation
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const data = matchedData(req); 
+    //main logic
     try {
-        const {connectionId} = req.params
-
-        const dm = await service.getChannelbyId(Number(connectionId))
+        const dm = await service.getChannelbyId(data.channelId)
         res.status(200).json(dm)
     } catch (err) {
         res.status(500).json({error: err.message || 'Internal Server Error'})
     }
 }
 const leaveChannel = async (req, res) =>{
+    // data validation
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const data = matchedData(req); 
+    //main logic
     try {
-        const {relationId} = req.body; 
-        const request = await service.leaveChannel(Number(relationId))
+        const request = await service.leaveChannel(data.relationId)
         res.status(200).json(request)
     } catch (err) {
         res.status(500).json({error: err.message || 'Internal Server Error'})
     }    
 }
 const joinRequest = async (req, res) =>{
+    // data validation
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const data = matchedData(req); 
+    //main logic
     try {
-        const {connectionId} = req.params
-        const {id} = req.user
-        const request = await service.joinRequest(Number(connectionId), Number(id))
+        const request = await service.joinRequest(data.channelId, Number(req.user.id))
         res.status(200).json(request)
     } catch (err) {
         res.status(500).json({error: err.message || 'Internal Server Error'})
@@ -59,47 +71,65 @@ const joinRequest = async (req, res) =>{
 }
 //======= MODERATION CONTROLLER===========
 const enableMod = async (req, res) =>{
+    // data validation
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const data = matchedData(req); 
+    //main logic
     try {
-        const {connectionId} = req.params
-        const {relationId} = req.body
-        await service.enableMod(Number(relationId))
+        await service.enableMod(data.relationId)
         res.status(200).json({ msg:'user has been granted Mod Primissions'})
     } catch (err) {
         res.status(500).json({error: err.message || 'Internal Server Error'})
     }    
 }
 const removeUser = async (req, res) =>{
+    // data validation
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const data = matchedData(req); 
+    //main logic
     try {
-        const {relationId} = req.body
-        await service.removeUser(Number(relationId))
+        await service.removeUser(data.relationId)
         res.status(200).json({msg: 'user removed'})
     } catch (err) {
         res.status(500).json({error: err.message || 'Internal Server Error'})
     }    
 }
 const getAllJoinRequests = async (req, res) =>{
+    // data validation
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const data = matchedData(req); 
+    //main logic
     try {
-        const {connectionId} = req.params
-        const allRequest = await service.getAllJoinRequests(Number(connectionId))
+        const allRequest = await service.getAllJoinRequests(data.channelId)
         res.status(200).json(allRequest)
     } catch (err) {
         res.status(500).json({error: err.message || 'Internal Server Error'})
     }    
 }
 const acceptRequest = async (req, res) =>{
+    // data validation
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const data = matchedData(req); 
+    //main logic
     try {
-        const {relationId} = req.body
-
-        await service.acceptRequest(Number(relationId))
+        await service.acceptReques(data.relationId)
         res.status(200).json({msg: 'user accepted'})
     } catch (err) {
         res.status(500).json({error: err.message || 'Internal Server Error'})
     }    
 }
 const rejectRequest = async (req, res) =>{
+    // data validation
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const data = matchedData(req); 
+    //main logic
     try {
-        const {relationId} = req.body
-        await service.rejectRequest(Number(relationId))
+        await service.rejectRequest(data.relationId)
         res.status(200).json({msg: 'user rejected'})
     } catch (err) {
         res.status(500).json({error: err.message || 'Internal Server Error'})

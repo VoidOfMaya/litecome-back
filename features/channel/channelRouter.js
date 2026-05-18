@@ -6,23 +6,23 @@ import { authorize } from './premissions.js'
 const channelRouter = Router({mergeParams: true});
 //premissions
 //======= AUTHENTICATED CONTROLLER===========
-channelRouter.get('/info',controller.getChannelInfo) // postman-tested
+channelRouter.get('/info',validate.channel,controller.getChannelInfo) // postman-tested
 channelRouter.post('/new',validate.newChannel,controller.createNewChannel)// postman-tested
-channelRouter.post('/joinreq',controller.joinRequest) // postman-tested
+channelRouter.post('/joinreq',validate.channel,controller.joinRequest) // postman-tested
 
 //======= MEMBERS CONTROLLER===========
-channelRouter.get('/dm' ,authorize.member ,controller.getChannel) // postman-tested
+channelRouter.get('/dm' ,validate.channel ,authorize.member ,controller.getChannel) // postman-tested
 //standalone routes:
-channelRouter.get('/' ,authorize.member ,controller.getChannel) // postman-tested
-channelRouter.put('/leave',authorize.member,controller.leaveChannel) // postman-tested
+channelRouter.get('/' , validate.channel ,authorize.member ,controller.getChannel) // postman-tested
+channelRouter.put('/leave',validate.relation ,authorize.member,controller.leaveChannel) // postman-tested
 
 //======= MODERATION CONTROLLER===========
 
-channelRouter.get('/mod/joinreq',authorize.mod, controller.getAllJoinRequests)// postman-tested
-channelRouter.put('/mod/acceptreq',authorize.mod, controller.acceptRequest)// postman-tested
-channelRouter.put('/mod/rejectreq',authorize.mod, controller.rejectRequest)// postman-tested
-channelRouter.delete('/mod/removeuser',authorize.mod, controller.removeUser)// postman-tested
-channelRouter.post('/mod/newmod',authorize.mod, controller.enableMod)
+channelRouter.get('/mod/joinreq',validate.channel ,authorize.mod, controller.getAllJoinRequests)// postman-tested
+channelRouter.put('/mod/acceptreq',validate.relation ,authorize.mod, controller.acceptRequest)// postman-tested
+channelRouter.put('/mod/rejectreq',validate.relation ,authorize.mod, controller.rejectRequest)// postman-tested
+channelRouter.delete('/mod/removeuser',validate.relation,authorize.mod, controller.removeUser)// postman-tested
+channelRouter.post('/mod/newmod',validate.relation ,authorize.mod, controller.enableMod)// postman-tested
 
 
 

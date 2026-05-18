@@ -75,7 +75,7 @@ architecture tasks based on layers:
         [X] editcurrentUser
         [X] getcurrentuserDashboard
 
-    []Channel services:-
+    [X]Channel services:-
         O-> authenticate routes
         [X] createChnl
         [X] createDmChnl (2 users only) * implemented into the accept friend request
@@ -138,8 +138,8 @@ architecture tasks based on layers:
     []IndexRouter
     [X]AuthRouter
     [X]userRouter
-    []chnlRouter
-    []frndRouter
+    [X]chnlRouter
+    [X]frndRouter
     []msgRouter
 
 ## Controllers
@@ -164,7 +164,7 @@ architecture tasks based on layers:
         [X]rejectFrndReqById
         [X]removeFrndFromList
 
-    []chnlController
+    [X]chnlController
         [X]createDmChnl
         [X]createChnl
         [X]getUserChnls
