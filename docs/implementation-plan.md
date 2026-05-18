@@ -122,7 +122,7 @@ architecture tasks based on layers:
     [X]login validation
     [X]user update validation
     [X] chnl creation validation
-    [] frnd request validation
+    [X] frnd request validation
     [] msg validation
 
 ## Error handelling
