@@ -1,6 +1,7 @@
 import { prisma } from "../../lib/prisma.js"
-import { validationResult, matchedData } from "express-validator";
+import { validationResult, matchedData, param } from "express-validator";
 const member = async (req, res, next) =>{
+
     const errors = validationResult(req);
     if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
     const {channelId} = matchedData(req); 
@@ -12,6 +13,7 @@ const member = async (req, res, next) =>{
             ]   
         }
     })
+    console.log(result)
     if(!result) res.status(404).json({msg: 'connection does not exist'})
     if(!result.isMember)res.status(403).json({msg: 'Access Denied!'})
     next();

@@ -14,21 +14,21 @@ channelRouter.post('/joinreq',validate.channel,controller.joinRequest) // postma
 //======= MEMBERS CONTROLLER===========
 channelRouter.get('/dm' ,validate.channel ,authorize.member ,controller.getChannel) // postman-tested
 //standalone routes:
-channelRouter.get('/' , validate.channel ,authorize.member ,controller.getChannel) // postman-tested
-channelRouter.put('/leave',validate.relation ,authorize.member,controller.leaveChannel) // postman-tested
+channelRouter.get('/' ,validate.channel ,authorize.member ,controller.getChannel) // postman-tested
+channelRouter.put('/leave' ,validate.relation ,authorize.member ,controller.leaveChannel) // postman-tested
 
 //======= MODERATION CONTROLLER===========
 
-channelRouter.get('/mod/joinreq',validate.channel ,authorize.mod, controller.getAllJoinRequests)// postman-tested
-channelRouter.put('/mod/acceptreq',validate.relation ,authorize.mod, controller.acceptRequest)// postman-tested
-channelRouter.put('/mod/rejectreq',validate.relation ,authorize.mod, controller.rejectRequest)// postman-tested
-channelRouter.delete('/mod/removeuser',validate.relation,authorize.mod, controller.removeUser)// postman-tested
-channelRouter.post('/mod/newmod',validate.relation ,authorize.mod, controller.enableMod)// postman-tested
+channelRouter.get('/mod/joinreq',validate.channel ,authorize.mod ,controller.getAllJoinRequests)// postman-tested
+channelRouter.put('/mod/acceptreq',validate.relation ,authorize.mod ,controller.acceptRequest)// postman-tested
+channelRouter.put('/mod/rejectreq',validate.relation ,authorize.mod ,controller.rejectRequest)// postman-tested
+channelRouter.delete('/mod/removeuser',validate.relation ,authorize.mod ,controller.removeUser)// postman-tested
+channelRouter.post('/mod/newmod',validate.relation ,authorize.mod ,controller.enableMod)// postman-tested
 
 //====== NESTED MESSAGE ROUTER==========
-
-channelRouter.use('/msgs', messsageRouter);
-
+// member level authorization
+channelRouter.use('/msgs',validate.channel ,authorize.member , messsageRouter);
+//mod
 
 
 export{
