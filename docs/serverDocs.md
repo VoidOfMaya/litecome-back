@@ -4,10 +4,10 @@
 ## Authentication:
   #### info:
   this server utilizes an access&refresh token structure for continous
-  and seemless user interaction without compromizing security.
-    - access token: is a jwt token utilizing passport.js granting the user access to resources using the content withing jwt as proof of identity
-    
-    - refresh token: is a single use custome made encrypted token thats used to re authenticate a new pair of access& refresh tokens
+  and seemless user interaction without compromizing security
+  * access token: is a jwt token utilizing passport.js granting the user access to     resources using the content withing jwt as proof of identity
+
+  * refresh token: is a single use custome made encrypted token thats used to re authenticate a new pair of access& refresh tokens
  ### Request Routes:
   #### Register:
   #### Log in:
