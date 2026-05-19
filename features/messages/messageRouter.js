@@ -1,6 +1,7 @@
 import { Router } from "express"
 import { controller } from "./messagesController.js";
 import { validate } from "./messageValidation.js";
+import { authorize } from "./premissions.js";
 // member authorization happens on parent channel router
 const messsageRouter = Router({mergeParams: true});//channelId should be an available  parameter
 /*
@@ -10,8 +11,12 @@ required: routes:-
         []editMsg
         []deleteMsg > author and mod only
 */
+//author only
 messsageRouter.get('/',controller.getChatLog)
-messsageRouter.post('/',validate.message, controller.submitMessage)
+messsageRouter.post('/',validate.createMessage, controller.submitMessage)
+messsageRouter.put('/',validate.editMessage, authorize.author, controller.editMessage)
+//mod or author only
+messsageRouter.delete('/',validate.messageId ,authorize.mod, controller.deleteMessage)
 export{
     messsageRouter
 }

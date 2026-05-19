@@ -36,11 +36,26 @@ const createMessage = async (channelId,userId, content, parentId = null) =>{
             parentId
         }
     })
-    
+
+}
+const editMessage =async (content, id) =>{
+    await prisma.message.update({
+        where:{ id: id},
+        data:{
+            content: content
+        }
+    })
+}
+const deleteMessage = async(id) =>{
+    await prisma.message.delete({
+        where:{id: id}
+    })
 }
 const service = {
     getChatlog,
-    createMessage
+    createMessage,
+    editMessage,
+    deleteMessage
 }
 
 export{

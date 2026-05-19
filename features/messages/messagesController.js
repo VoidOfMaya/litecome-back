@@ -28,10 +28,37 @@ const submitMessage = async (req, res) =>{
         res.status(500).json({msg: err.message || 'Internal Server Error'})
     }   
 }
-
+const editMessage = async (req, res) =>{
+    // data validation
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const {content, id} = matchedData(req); 
+    //main logic
+    try {
+        await service.editMessage(content, id)
+        return res.status(200).json({msg: 'message edit!'})
+    } catch (err) {
+        res.status(500).json({msg: err.message || 'Internal Server Error'})
+    }     
+}
+const deleteMessage = async(req, res) =>{
+    // data validation
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const {id} = matchedData(req); 
+    //main logic
+    try {
+        await service.deleteMessage(id)
+        return res.status(200).json({msg: 'message deleted!'})
+    } catch (err) {
+        res.status(500).json({msg: err.message || 'Internal Server Error'})
+    }   
+}
 const controller = {
     getChatLog,
-    submitMessage
+    submitMessage,
+    editMessage,
+    deleteMessage
 }
 
 export{
