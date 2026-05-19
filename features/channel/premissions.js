@@ -13,7 +13,6 @@ const member = async (req, res, next) =>{
             ]   
         }
     })
-    console.log(result)
     if(!result) res.status(404).json({msg: 'connection does not exist'})
     if(!result.isMember)res.status(403).json({msg: 'Access Denied!'})
     next();

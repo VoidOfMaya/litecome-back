@@ -9,14 +9,29 @@ const getChatLog = async (req, res) =>{
     const {channelId} = matchedData(req); 
     //main logic
     try {
-        return res.status(200).json({channelID: channelId})
+        const chatlog = await service.getChatlog(channelId)
+        return res.status(200).json(chatlog)
     } catch (err) {
         res.status(500).json({msg: err.message || 'Internal Server Error'})
     }
 }
+const submitMessage = async (req, res) =>{
+    // data validation
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const {channelId, content, parentId} = matchedData(req); 
+    //main logic
+    try {
+        await service.createMessage(channelId,Number(req.user.id), content, parentId)
+        return res.status(200).json({msg: 'message created!'})
+    } catch (err) {
+        res.status(500).json({msg: err.message || 'Internal Server Error'})
+    }   
+}
 
 const controller = {
     getChatLog,
+    submitMessage
 }
 
 export{
