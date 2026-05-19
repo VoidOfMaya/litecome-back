@@ -1,8 +1,7 @@
-# Litecom messaging app - backend
+# (Chatter)Litecom messaging app - backend
 
 ## Overview:
-Litecome is a simple messaging webapp
-server Documentation and usage:[Documentation](./docs/serverDocs.md)
+server Documentation and usage:[Docs](./docs/serverDocs.md)
 
 
 ## Data model
