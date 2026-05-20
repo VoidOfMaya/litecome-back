@@ -6,9 +6,9 @@ import { channelRouter } from "../channel/channelRouter.js";
 const friendRouter = Router();
 
 friendRouter.get('/', controller.getActiveFriends)
+friendRouter.get('/requests',controller.pendingFriends)
 friendRouter.get('/:id', validate.friendId ,controller.getFriendConnectionbyId)
-friendRouter.get('/requests',validate.friendReq ,controller.pendingFriends)
-friendRouter.post('/send-request',controller.requestFriend)
+friendRouter.post('/send-request',validate.friendReq,controller.requestFriend)
 friendRouter.put('/accept-request', validate.reqId, controller.acceptFriendRequest)
 friendRouter.delete('/reject-request', validate.reqId, controller.rejectFriendRequest)
 friendRouter.delete('/',controller.endFriendship)

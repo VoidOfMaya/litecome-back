@@ -8,8 +8,6 @@ const friendId = [
 ]
 /*senderId, recieverId*/
 const friendReq = [
-    body('senderId').trim().notEmpty().withMessage('sender id must be defined')
-        .isInt().toInt().withMessage('sender id must be an integer'),
     body('recieverId').trim().notEmpty().withMessage('reciever id must be defined')
         .isInt().toInt().withMessage('reciever id must be an integer')
 ]

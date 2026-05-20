@@ -28,10 +28,10 @@ const requestFriend = async (req, res) =>{
     // data validation
     const errors = validationResult(req);
     if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
-    const {senderId, recieverId} = matchedData(req); 
+    const {recieverId} = matchedData(req); 
     //main logic
     try {
-        const request = await service.sendFriendRequest(senderId, recieverId)
+        const request = await service.sendFriendRequest(Number(req.user.id), recieverId)
         res.status(200).json(request)
     } catch (err) {
         res.status(500).json({msg: err.message || 'Internal Server Error'})       
