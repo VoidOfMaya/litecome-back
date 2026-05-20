@@ -73,9 +73,8 @@
     refreshToken
   }
   ```
-
 ## User:-
-  #### GetUser/Me:
+  #### Get user/Me:
    is a compiset route accessing multiple resources and entities to populate the users dathboboard with all relevant data!
 
    route:`GET:/user/me`. (authentication protected)
@@ -109,7 +108,7 @@
       ]
    }
    ```
-  #### GetMyProfile:
+  #### Get my profile:
 
   gets user data for user profile
   route:`GET:/user/me`. (authentication protected)
@@ -129,7 +128,7 @@
     createdAt
 }
   ```
-  #### EditMyProfile
+  #### Edit my profile
 
   route: `PUT:/user/me/profile`(authentication protected)
 
@@ -163,5 +162,105 @@
   }
   ```
 ## Friends:-
+  #### Get friends:
+  gets an array of objects that represent the friendship entity where status is 'ACTIVE', containing the friends data
+  route: `GET:/friend/`
+  
+  expects" `a valid jwt token`
+  
+  returns:
+  ```
+  {
+    [
+      {
+        id,
+        friend:{
+          id,
+          email,
+          name,
+          bio,
+          photo,
+          lastOnline,
+          isOnline,
+          createdAt
+        }
+      }
+    ]
+  }
+  ```
+  notice: `id` referances the id of the relationship record itself  not the friend entity
+  #### get pending Friend requests
+  gets all friendship entities with a status of 'PENDING'
+
+  route: `GET:/friend/requests`
+
+  expects:`expects a valid  jwt token`
+
+  returns
+  ```
+  {
+    id,
+    friend:{
+      id,
+      email,
+      name,
+      photo
+    }
+  }
+  ```
+  #### accept friend request
+  updates the relationship status to 'ACTIVE' and
+  creates a two way friend type communication channel
+  
+  route:`PUT:/friend/accept_request`
+
+  expects: `a valid jwt token + {requestId} in req.body` 
+  
+  returns:
+  ```
+  {
+    {
+      id,
+      createdAt,
+      friendId,
+      userId,
+      status
+    },
+    channelId
+  }
+  ```
+  #### send friend request
+  creates a new realtionship entity between sender and reciever with a status of 'PENDING'
+
+  route: `POST:/friend/send-request`
+
+  expects: `valid jwt token + req.body: {recieverId}`
+
+  returns:
+  ```
+  {
+    id,
+    status,
+    createdAt,
+    userId,
+    friendId
+  }
+  ```
+  #### reject friend request
+  this rout and delets the relationship entity
+
+  route:`DELET:/friend/reject-request`
+
+  expects: `a valid jwt token + req.body:{requestId}`
+
+  returns: `{msg: 'friend request rejected!'}`
+  #### end friendship
+  like reject request this delets the relationship but additionally delets the communication channel and channel member entities belonging to the channel and its user
+
+  route: `DELETE:/friend/`
+
+  expects: `jwt token, req.body{relationId, channelId}`
+
+  returns: `{msg: 'friend removed!'}`
 ## Channels:-
 ## Messages:-
