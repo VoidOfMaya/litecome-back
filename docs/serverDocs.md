@@ -10,8 +10,69 @@
   * refresh token: is a single use custome made encrypted token thats used to re authenticate a new pair of access& refresh tokens
  ### Request Routes:
   #### Register:
+   creates a new user acount and automatically join them to a global channel group!.
+
+   route:`POST:/auth/register`.
+
+   recieves:
+
+   ```
+    {
+    email,
+    name,
+    password,
+    confirmPassword
+    }
+   ```
   #### Log in:
+  utelizes passport.js to authenticate user, sets up a jwt token and refresh token
+  route:`POST:/auth/login`
+
+  recieves:
+  ```
+  {email, password}
+  ```
+  returns:
+  ```
+  {
+    user:{
+        id,
+        email,
+        name,
+        bio,
+        photo,
+        createdAt,
+        lastOnline,
+    },
+    accessToken,
+    refreshToken
+  }
+  ```
   #### refresh:
+  re-authenticates a new jwt access token, when  provided a valid refresh token, refresh tokens can only be used once to reauthenticate a new access refresh pair`note: always provide the latest refresh token else server will auto log out on user and remove all valid refresh tokens`
+
+  route:`POST:/auth/refresh`
+
+  expects: `{rToken}`
+
+  returns:
+  ```
+  {
+    user:{
+        id,
+        email,
+        name,
+        bio,
+        photo,
+        lastOnline,
+        isOnline,
+        createdAt
+    },
+    accessToken,
+    refreshToken
+  }
+  ```
+
 
 ## User:-
 ## Friends:-
