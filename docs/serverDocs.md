@@ -49,11 +49,12 @@
   }
   ```
   #### refresh:
+
   re-authenticates a new jwt access token, when  provided a valid refresh token, refresh tokens can only be used once to reauthenticate a new access refresh pair`note: always provide the latest refresh token else server will auto wipe the refreshtoken tree for user, on invalid token usageas a security measure`
 
-  route:`POST:/auth/refresh`
+  route:`POST:/auth/refresh` (authentication protected)
 
-  expects: `{userId, rToken}`
+  expects: `{rToken} and a valid jwt token` and a valid jwt token
 
   returns:
   ```
@@ -73,8 +74,94 @@
   }
   ```
 
-
 ## User:-
+  #### GetUser/Me:
+   is a compiset route accessing multiple resources and entities to populate the users dathboboard with all relevant data!
+
+   route:`GET:/user/me`. (authentication protected)
+
+   recieves: `a valid jwt token`> provided by a valid jwt token using passport.js
+   
+   return:
+   ```
+   {
+    user{
+      id, 
+      name, 
+      bio,
+      photo
+      },
+    channels:[
+        {
+        id, 
+        name,
+        type
+        },
+      ],
+    friends:[
+        {
+        id,
+        name,
+        photo,
+        bio,
+        onlineStatus,
+        },
+      ]
+   }
+   ```
+  #### GetMyProfile:
+
+  gets user data for user profile
+  route:`GET:/user/me`. (authentication protected)
+
+  recieves: `a valid jwt token`> provided by a valid jwt token using passport.js
+
+  returns:
+  ```
+  {
+    id,
+    email,
+    name,
+    bio,
+    photo,
+    lastOnline,
+    isOnline,
+    createdAt
+}
+  ```
+  #### EditMyProfile
+
+  route: `PUT:/user/me/profile`(authentication protected)
+
+  expects: `valid jwt token`and:
+  ```
+  {
+    name,
+    bio,
+    photo,
+  }
+  ```
+  returns: `{msg: 'updated successful'}`
+
+  #### GetOtherUsersProfile:
+
+  route: `GET:/user/:id`(authentication protected)
+
+  expects:` a valid jwt token + req.params.id`
+
+  returns: 
+  ```
+  {
+    id,
+    email,
+    name,
+    bio,
+    photo,
+    lastOnline,
+    isOnline,
+    createdAt
+  }
+  ```
 ## Friends:-
 ## Channels:-
 ## Messages:-
