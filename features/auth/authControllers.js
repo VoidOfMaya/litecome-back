@@ -38,7 +38,20 @@ const token = async (req, res)=>{
             const newRToken = await service.createRToken(refreshToken.userId, refreshToken.token)
             const newAToken = await service.createAToken(refreshToken.userId)
             const user = await service.getUserById(refreshToken.userId)
-            return res.status(201).json({user ,accessToken: newAToken, refreshToken: newRToken})
+            return res.status(201).json({
+                user:{
+                    id: user.id,
+                    email: user.email,
+                    name: user.name,
+                    bio: user.bio,
+                    photo: user.photo,
+                    lastOnline: user.lastOnline,
+                    isOnline: user.isOnline,
+                    createdAt: user.createdAt
+                } ,
+                accessToken: newAToken, 
+                refreshToken: newRToken
+            })
         }
         throw new Error('err: at token controller')
 
