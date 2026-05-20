@@ -31,17 +31,41 @@ const passportConfig=()=>{
     }))
 }
 const isAuthenticated = passport.authenticate('jwt',{session:false});
-/*
- check if access token is valid?
- if not check if  refresh token is valid?
- if refresh token valid then authenticate new  access  token
- if refresh token exists and revoked delete all refresh tokens and delete 
-    access token (promp user login)
-if  refresh token does not exist but access token 
-*/
-//authorization for different access levels goes here:
+
+const validateRtoken = async(req, res, next)=>{
+    const {rToken: token, userId} = req.body;
+    try{
+        const dbToken = await  prisma.refreshToken.findUnique({
+            where:{token: token}
+        })
+        console.log('Rtoken validator')
+        if(!dbToken){ //validate token existance
+            await wipeTokenByUserId(userId)
+            throw new Error ('invalid token use detected')
+        }
+        if(dbToken){
+            //validates if out of date
+            const now = Date.now()
+            if(dbToken.expiresAt < now) throw new Error('Token expired')
+            //validates revoke status
+            if(dbToken.revoked){ 
+                await wipeTokenByUserId(userId)
+                throw new Error ('invalid token use detected')
+            }
+            next()
+        }
+    }catch(err){
+        next(err)
+    }
+}
+const wipeTokenByUserId = async(id)=>{
+    await prisma.refreshToken.deleteMany({
+        where:{ userId: Number(id)}
+    }) 
+}
 
 export{
     passportConfig,
-    isAuthenticated
+    isAuthenticated,
+    validateRtoken
 }

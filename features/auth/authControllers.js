@@ -19,7 +19,6 @@ const login = async (req, res)=>{
     const errors = validationResult(req);
     if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
     const data = matchedData(req);  
-    console.log(data)
     //logic
     try{
         const user = await service.login(data);
@@ -34,25 +33,24 @@ const token = async (req, res)=>{
     //if refresh token invalid return error
     try{
         const refreshToken = await service.validateRToken(req.body.rToken)
-        if(refreshToken){
-            const newRToken = await service.createRToken(refreshToken.userId, refreshToken.token)
-            const newAToken = await service.createAToken(refreshToken.userId)
-            const user = await service.getUserById(refreshToken.userId)
-            return res.status(201).json({
-                user:{
-                    id: user.id,
-                    email: user.email,
-                    name: user.name,
-                    bio: user.bio,
-                    photo: user.photo,
-                    lastOnline: user.lastOnline,
-                    isOnline: user.isOnline,
-                    createdAt: user.createdAt
-                } ,
-                accessToken: newAToken, 
-                refreshToken: newRToken
-            })
-        }
+        //token validation happens in an auth midddleware
+        const newRToken = await service.createRToken(refreshToken.userId, refreshToken.token)
+        const newAToken = await service.createAToken(refreshToken.userId)
+        const user = await service.getUserById(refreshToken.userId)
+        return res.status(201).json({
+            user:{
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                bio: user.bio,
+                photo: user.photo,
+                lastOnline: user.lastOnline,
+                isOnline: user.isOnline,
+                createdAt: user.createdAt
+            } ,
+            accessToken: newAToken, 
+            refreshToken: newRToken
+        })
         throw new Error('err: at token controller')
 
     }catch(err){
@@ -63,7 +61,7 @@ const token = async (req, res)=>{
 const logout = async (req, res) =>{
     try{
         await service.revokeRtoken(req.body.token);
-        res.status(200).json({message: 'session token revoked'})
+        res.status(200).json({message: 'token revoked'})
     }catch(err){
         res.status(500).json({code: err})
     }
