@@ -5,6 +5,9 @@ import { pipe } from './features/routerController.js';
 import { midware } from './features/middlewareController.js';
 import passport from 'passport';
 
+//cron token cleaner
+import { tokenCleaner } from './tasks/dbCleaner.js';
+
 
 const app = express();
 
@@ -19,6 +22,7 @@ midware.passportConfig();
 app.use(passport.initialize());
 
 //routs:-
+tokenCleaner(); //runs auto db cleaning function every week!
 app.use('/',pipe.indexRouter) // this houses the read rout for post and comments Comment router will live here!
 app.use('/auth', pipe.authRouter)
 app.use('/user',midware.isAuthenticated,pipe.userRouter)
