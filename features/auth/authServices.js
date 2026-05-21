@@ -51,9 +51,14 @@ const login = async (data) =>{
     if(!match) throw new Error("invalid login");
     //access token:-
     const accessToken = await createAToken(user.id);
+    
+    // creates a uuid for the A&T token thread
+    const sessionId = crypto.randomUUID()
     // refresh token:-
-    const refreshToken = await createRToken(user.id)
+    const refreshToken = await createRToken(user.id,sessionId)
+
     return{
+        threadId: sessionId,
         user:{
             id: user.id,
             email: user.email,
@@ -67,7 +72,7 @@ const login = async (data) =>{
         refreshToken
     }
 }
-const createAToken = async (userId)=>{
+const createAToken = async (userId, threadId)=>{
     const user = await prisma.user.findUnique({
         where:{id: Number(userId)}
     });
@@ -79,7 +84,7 @@ const createAToken = async (userId)=>{
     return accessToken
 }
 // requires user object
-const createRToken = async (userId, token=null)=>{
+const createRToken = async (userId,threadId, token=null)=>{
     //creates a new token
     const refreshToken = crypto.randomBytes(32).toString('hex');
     const oneWeek = 7 * 24 * 60 * 60 * 1000; //one week in milliseconds
@@ -89,7 +94,8 @@ const createRToken = async (userId, token=null)=>{
         if(token){
             await prisma.refreshToken.update({
                 where: { token: token },
-                data: {revoked: true}
+                data: {
+                    revoked: true}
             });
         }
         console.log(userId)
@@ -99,7 +105,8 @@ const createRToken = async (userId, token=null)=>{
                 token: refreshToken,           
                 expiresAt: experationDate,                   
                 userId: Number(userId),
-                revoked: false
+                revoked: false,
+                threadId: threadId
             }
         })
         return refreshToken        
@@ -161,6 +168,11 @@ const revokeRtoken = async (token)=>{
         }
     })
 }
+const removeTokenThread = async ( threadId) =>{
+    await prisma.refreshToken.deleteMany({
+        where:{threadId: threadId}
+    })
+}
 const service ={
     login,
     register,
@@ -168,7 +180,8 @@ const service ={
     createRToken,
     validateRToken,
     getUserById,
-    revokeRtoken    
+    revokeRtoken,
+    removeTokenThread 
 }
 export{
     service
