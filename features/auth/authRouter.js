@@ -6,7 +6,7 @@ const authRouter = Router()
 authRouter.post('/register', validate.NewAccount, controller.newUser);
 authRouter.post('/login', validate.Login, controller.login)
 //logout revokes token on backend, delets  access token from frontend
-authRouter.post('/logout',controller.logout)
+authRouter.delete('/logout',isAuthenticated,controller.logout)
 // renew tokens
 authRouter.post('/refresh',isAuthenticated,validateRtoken ,controller.token)
 
