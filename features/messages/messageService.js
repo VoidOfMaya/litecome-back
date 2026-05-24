@@ -27,7 +27,6 @@ const getChatlog = async (channelId)=>{
     return result
 }
 const createMessage = async (channelId,userId, content, parentId = null) =>{
-    console.log('message create service')
     await prisma.message.create({
         data:{
             userId: userId,

@@ -397,3 +397,34 @@
   returns`{msg: "mod privillage enabled"}`
 
 ## Messages:-
+  #### create message 
+  - only channel members can create a message
+  rout:`POST:/channel/:id/msgs`
+  expects:`jwt token + req.param:{channelId} + req.body:{content, parentId?}`
+  returns: `{msg: 'message created!'}`
+  #### read messages
+   -all channel members can read this
+  rout:`GET:/channel/:id/msgs`
+  expects:`jwt token + req.param:{channelId}`
+  returns:
+  ```
+  [
+    {
+      id,
+      userId,
+      content,
+      createdAt,
+      parent
+    }
+  ]
+  ```
+  #### update message
+    - only author
+  rout:`PUT:/channel/:id/msgs`
+  expects:`jwt token + req.param:{channelId} + req.body:{content, id}<== id is for the message id in the db`
+  returns: `{msg: 'message edit!'}`
+  #### delet message
+    - only original author or mod of channel can access this
+  rout:`DELETE:/channel/:id/msgs`
+  expects:`jwt token + req.param:{channelId} + req.body:{id}<== id is for the message id in the db`
+  returns: ``
