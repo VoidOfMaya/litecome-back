@@ -32,12 +32,13 @@ const createNewChannel = async (req, res) =>{
 //======= MEMBERS CONTROLLER===========
 const getChannel = async (req, res) =>{
     // data validation
+    console.log(`accessing channel getter controller`)
     const errors = validationResult(req);
     if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
-    const data = matchedData(req); 
+    const {channelId} = matchedData(req); 
     //main logic
     try {
-        const dm = await service.getChannelbyId(data.channelId)
+        const dm = await service.getChannelbyId(channelId)
         res.status(200).json(dm)
     } catch (err) {
         res.status(500).json({error: err.message || 'Internal Server Error'})

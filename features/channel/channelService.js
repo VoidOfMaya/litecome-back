@@ -78,7 +78,7 @@ const enableMod = async (relationId) =>{
             isMod: true
         }
     })
-    return 'user is mode set to true'
+    return 'mod privillage enabled'
 }
 //remove from channel
 const removeUser = async (relationId) =>{

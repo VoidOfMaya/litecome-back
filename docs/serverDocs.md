@@ -264,7 +264,7 @@
 
   returns: `{msg: 'friend removed!'}`
 ## Channels:-
-
+  all channel routes are devided by presmission level with  authenticated  being the lowes level for authrizing general information viewing and join requests, being a member grants access to interactive features and access to internal group info, and mode level access grants  filtering and editorial access on the channel, from moderating who gets access which messages are not allowed and who gets kicked out on group rule violations
 //======= AUTHENTICATED Routes===========
   #### get channel info
 
@@ -297,22 +297,103 @@
   ```
   #### join channel Reques
 
-//======= MEMBERS Routes===========
-  #### get dm channel
+  route: `POST:/channel/:id/joinreq`
 
+  expects: `valid jwt token`
+
+  return `"request created"`
+  
+  //======= MEMBERS Routes===========
+  #### get dm channel
   route: `GET:/friend/:id/dm`
 
-//standalone routes:
+  expects: ` a valid  jwt token + req.param:{channelID}`
+  
+  returns:
+  ```
+  {
+    id,
+    name,
+    createdAt,
+    type,
+    memeber[
+             {
+            id,    <-denotes the relation entity id
+            isMod, <- irrelevant to dm channels
+            user{
+                id,
+                name,
+                photo
+            }
+        }
+    ],
+    messages[],
+  }
+  ```
   #### get group channel
+
+
+  route: `GET:/friend/:id`
+
+  expects: ` a valid  jwt token + req.param:{channelID}`
+  
+  returns:
+  ```
+  {
+    id,
+    name,
+    createdAt,
+    type,
+    memeber[
+             {
+            id,    <-denotes the relation entity id
+            isMod,
+            user{
+                id,
+                name,
+                photo
+            }
+        }
+    ],
+    messages[],
+  }
+  ```
   #### leave channel
+  route: `PUT:/channel/:id/leave`
+  expects: ` jwt token, req.param:{channelId}, req.body{relationId}`
+  returns: `{msg: "Connection Terminated"}` 
 //======= MODERATION Routes===========
   #### get all join requests
+  route: `GET:/channel/:id/mod/joinreq`
+  expects `jwt token + req.param":{channelId}, mod auth`
+  returns:
+  ```
+  [
+    {
+      id,
+      channelId,
+      isMember,
+      isMod,
+      userId,
+      joinedAt
+    }
+  ]
+  ```
   #### accept join request
+  route:`PUT:/channel/:id/mod/acceptreq`
+  expects:`jwt token + req.param{channelId} + relationId + modauth`
+  returns:`{msg: "request accepted"}`
   #### reject join request
+  route:`PUT:/channel/:id/mod/rejectreq`
+  expects:`jwt token + req.param{channelId} + relationId + modauth`
+  returns:`{msg: "request rejected"}`
   #### remove User
+  route:`DELETE://channel/:id/mod/removeuser`
+  expects:`jwt token + req.param{channelId} + relationId + modauth`
+  returns:`{msg: "user removed!"}`
   #### enable new mod
+  route:`POST:/channel/:id/newmod`
+  expects:`jwt token + req.param{channelId} + relationId + modauth`
+  returns`{msg: "mod privillage enabled"}`
 
-//====== NESTED MESSAGE ROUTER==========
-// member level authorization
-channelRouter.use('/msgs',validate.channel ,authorize.member , messsageRouter);
 ## Messages:-
