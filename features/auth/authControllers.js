@@ -3,6 +3,7 @@ import {service} from "./authServices.js";
 
 const newUser = async (req, res) =>{
     //validation handler
+    console.log(req.body)
     const errors = validationResult(req);
     if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
     const data = matchedData(req);
@@ -10,7 +11,7 @@ const newUser = async (req, res) =>{
     try{
         await service.register(data)
     }catch(err){
-        res.status(500).json({error: err.message || 'Internal Server Error'})
+        return res.status(500).json({error: err.message || 'Internal Server Error'})
     }
     res.status(201).json({message:'User  registered successfully'})
 }
@@ -53,8 +54,6 @@ const token = async (req, res)=>{
             accessToken: newAToken, 
             refreshToken: newRToken
         })
-        throw new Error('err: at token controller')
-
     }catch(err){
         console.log(err)
         res.status(err.status).json({code: err.code})
