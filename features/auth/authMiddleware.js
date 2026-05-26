@@ -40,7 +40,6 @@ const validateRtoken = async(req, res, next)=>{
         })
         console.log('Rtoken validator')
         if(!dbToken){ //validate token existance
-            await wipeTokenByUserId(req.user.id)
             throw new Error ('invalid token use detected')
         }
         if(dbToken){
@@ -49,7 +48,7 @@ const validateRtoken = async(req, res, next)=>{
             if(dbToken.expiresAt < now) throw new Error('Token expired')
             //validates revoke status
             if(dbToken.revoked){ 
-                await wipeTokenByUserId(req.user.id)
+                await wipeTokenByUserId(dbToken.userId)
                 throw new Error ('invalid token use detected')
             }
             next()

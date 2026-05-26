@@ -13,10 +13,11 @@ import { tokenCleaner } from './tasks/dbCleaner.js';
 const app = express();
 
 //enables all cores temporarily for testing
-app.use(cors());
+app.use(cors({
+  origin:'http://localhost:5173',
+  credentials: true,
+}));
 
-//parse cookies
-app.use(cookieParser());
 //parse req string to json
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -26,6 +27,8 @@ app.use(express.urlencoded({extended: true}));
 midware.passportConfig();
 app.use(passport.initialize());
 
+//parse cookies
+app.use(cookieParser());
 //routs:-
 tokenCleaner(); //runs auto db cleaning function every week!
 app.use('/',pipe.indexRouter) // this houses the read rout for post and comments Comment router will live here!

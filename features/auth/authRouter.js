@@ -8,7 +8,7 @@ authRouter.post('/login', validate.Login, controller.login)
 //logout revokes token on backend, delets  access token from frontend
 authRouter.delete('/logout',isAuthenticated,controller.logout)
 // renew tokens
-authRouter.post('/refresh',isAuthenticated,validateRtoken ,controller.token)
+authRouter.post('/refresh',validateRtoken ,controller.token)
 
 
 export{

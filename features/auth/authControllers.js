@@ -27,14 +27,14 @@ const login = async (req, res)=>{
         res.cookie('refreshToken', result.refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            sameSite: 'lax',
             maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
         });
 
         res.cookie('threadId', result.threadId, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            sameSite: 'lax',
             maxAge: 1000 * 60 * 60 * 24 * 7,
         });
         res.status(200).json({user: result.user, accessToken: result.accessToken});
@@ -46,11 +46,14 @@ const login = async (req, res)=>{
 const token = async (req, res)=>{
     //if refresh token valid  create new access token & refresh token
     //if refresh token invalid return error
-
+    console.log('Refresh controller')
+    console.log(req.cookie);
     try{
         //validating that cookies exist
         const oldToken = req.cookies.refreshToken
         const threadId = req.cookies.threadId
+        console.log('refresh rout controller')
+        console.log(`token: ${oldToken} \n threadId: ${threadId}`)
         if(!oldToken|| !threadId){
             return res.status(401).json({
                 code: 'Missing Credentials',
@@ -68,9 +71,7 @@ const token = async (req, res)=>{
         // overwrite cookies automatically
         
         res.cookie(
-            'refreshToken',
-            newRToken,
-            {
+            'refreshToken',newRToken,{
                 httpOnly: true,
                 secure:process.env.NODE_ENV ==='production',
                 sameSite: 'lax',
@@ -78,9 +79,7 @@ const token = async (req, res)=>{
             }
         );
         res.cookie(
-            'threadId',
-            threadId,
-            {
+            'threadId',threadId,{
                 httpOnly: true,
                 secure:process.env.NODE_ENV ==='production',
                 sameSite: 'lax',
