@@ -54,7 +54,11 @@ const validateRtoken = async(req, res, next)=>{
             next()
         }
     }catch(err){
-        next(err)
+        res.clearCookie('refreshToken');
+        res.clearCookie('threadId')
+        return res.status(401).json({
+            message: 'Session expired'
+        })
     }
 }
 const wipeTokenByUserId = async(id)=>{
