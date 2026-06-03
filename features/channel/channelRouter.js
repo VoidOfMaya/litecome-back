@@ -12,7 +12,6 @@ channelRouter.post('/new',validate.newChannel,controller.createNewChannel)// pos
 channelRouter.post('/joinreq',validate.channel,controller.joinRequest) // postman-tested
 
 //======= MEMBERS CONTROLLER===========
-channelRouter.get('/dm',validate.channel ,authorize.member ,controller.getChannel) // postman-tested
 //standalone routes:
 channelRouter.get('/' ,validate.channel ,authorize.member ,controller.getChannel) // postman-tested
 channelRouter.put('/leave' ,validate.relation ,authorize.member ,controller.leaveChannel) // postman-tested
