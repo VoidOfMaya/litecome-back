@@ -30,10 +30,10 @@ const mod = async (req, res, next) =>{
             ]   
         }
     })
-    if(!result) res.status(403).json({msg: 'unauthorized'})
+    if(!result) res.status(403).json({msg: 'Access Denied!'})
     if(!result) res.status(404).json({msg: 'connection does not exist'})
     if(!result.isMember)res.status(403).json({msg: 'Access Denied!'})
-    if(!result.isMod)res.status(403).json({msg: 'requires mod privillage'})
+    if(!result.isMod)res.status(403).json({msg: 'Access Denied!'})
     next();
 }
 
