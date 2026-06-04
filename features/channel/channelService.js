@@ -40,7 +40,32 @@ const getChannelbyId = async (id) =>{
                     }
                 }
             },
-            messages: true,
+            messages:{
+                select:{
+                    id: true,
+                    content: true,
+                    createdAt:true,
+                    user:{
+                        select:{
+                            id: true,
+                            name:true
+                        }
+                    },
+                    parent:{
+                        select:{
+                            id:true,
+                            content:true,
+                            user:{
+                                select:{
+                                    id:true,
+                                    name:true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
         }
     })
     return result
