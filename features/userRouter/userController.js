@@ -6,6 +6,7 @@ const getDashboard = async (req, res)=>{
     try {
         //takes req.user.id to get dashboard
         const data = await service.populateDashboard(req.user.id)
+        //console.log(data)
         res.status(200).json(data)
     } catch (err) {
       res.status(500).json({msg: err.message || 'internal server error'})  

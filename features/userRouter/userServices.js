@@ -9,16 +9,23 @@ const populateDashboard = async (userId) =>{
             },
             friendSent:{
                 where:{status: 'ACTIVE'},
-                include:{friend: true}
+                include:{
+                    friend: true,
+                    channel: true
+                }
             },
             friendsRecieved:{
                 where:{status: 'ACTIVE'},
+
                 include:{
-                    user: true
+                    user: true,
+                    channel: true
                 }
             }
         }
+        /**/
     })
+    console.log(result)
     const sanitizedUserData = () =>{
         return {id: result.id, name: result.name, bio: result.bio,photo: result.photo}
     }
@@ -38,6 +45,7 @@ const populateDashboard = async (userId) =>{
         result.friendSent.forEach(connection =>{
             const friend = connection.friend;
             array.push({
+                channelId: connection.channelId,
                 id: friend.id, 
                 name: friend.name,
                 photo: friend.photo,
@@ -52,6 +60,7 @@ const populateDashboard = async (userId) =>{
             array.forEach(connection =>{
                 if(connection.id === friend.id)return
                 array.push({
+                    channelId: connection.channelId,
                     id: friend.id,
                     name: friend.name,
                     photo: friend.photo,
