@@ -27,7 +27,7 @@ const getChatlog = async (channelId)=>{
     return result
 }
 const createMessage = async (channelId,userId, content, parentId = null) =>{
-    const query = await prisma.message.create({
+    await prisma.message.create({
         data:{
             userId: userId,
             channelId: channelId,
@@ -35,7 +35,6 @@ const createMessage = async (channelId,userId, content, parentId = null) =>{
             parentId: parentId
         }
     })
-    return query
 }
 const editMessage =async (content, id) =>{
     await prisma.message.update({
