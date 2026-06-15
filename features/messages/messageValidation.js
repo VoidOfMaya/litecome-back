@@ -9,8 +9,9 @@ const createMessage =[
 const editMessage =[
     body('content').trim().notEmpty().withMessage("no message provided!")
     .isString().isLength({min: 1, max: 750}).withMessage("message length out of range!"),
-    body('parentId').isNumeric().withMessage('parent id must be an integed if provided')
-    .customSanitizer(value => value === undefined ? null : value)
+    body('id').trim().notEmpty().withMessage('a message id is not provided')
+    .isInt().withMessage('id must be an integer value').
+    toInt()
 ]
 const messageId = [
         body('id').isInt().toInt().withMessage('parent id must be an integed if provided')

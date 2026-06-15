@@ -38,7 +38,7 @@ const createMessage = async (channelId,userId, content, parentId = null) =>{
 }
 const editMessage =async (content, id) =>{
     await prisma.message.update({
-        where:{ id: id},
+        where:{ id: Number(id)},
         data:{
             content: content
         }
@@ -46,7 +46,7 @@ const editMessage =async (content, id) =>{
 }
 const deleteMessage = async(id) =>{
     await prisma.message.delete({
-        where:{id: id}
+        where:{id: Number(id)}
     })
 }
 const service = {

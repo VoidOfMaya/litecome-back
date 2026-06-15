@@ -8,11 +8,11 @@ const author = async (req, res, next) =>{
     if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
     const {id} = matchedData(req); 
     const result = await prisma.message.findUnique({
-        where:{id : id}
+        where:{id : Number(id)}
     })
 
     if(!result) return res.status(404).json({msg: 'connection does not exist'})
-    if(result.userId === req.user.id) return res.status(403).json({msg: 'Access Denied!'})
+    if(!Number(result.userId) === Number(req.user.id)) return res.status(403).json({msg: 'Access Denied!'})
     next();
 }
 //validates both  membership and mod status as mode has to be a member!

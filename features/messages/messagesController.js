@@ -37,9 +37,12 @@ const submitMessage = async (req, res) =>{
 }
 const editMessage = async (req, res) =>{
     // data validation
+    console.log(`message editor controller`)
     const errors = validationResult(req);
     if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
     const {content, id} = matchedData(req); 
+    console.log(content)
+    console.log(id)
     //main logic
     try {
         await service.editMessage(content, id)
