@@ -12,11 +12,12 @@ required: routes:-
         []deleteMsg > author and mod only
 */
 //author only
+
 messsageRouter.get('/',controller.getChatLog)
 messsageRouter.post('/',validate.createMessage, controller.submitMessage)
 messsageRouter.put('/',validate.editMessage, authorize.author, controller.editMessage)
 //mod or author only
-messsageRouter.delete('/',validate.messageId ,authorize.mod, controller.deleteMessage)
+messsageRouter.delete('/',validate.messageId ,authorize.deletePriv, controller.deleteMessage)
 export{
     messsageRouter
 }

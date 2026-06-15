@@ -17,9 +17,11 @@ const author = async (req, res, next) =>{
 }
 //validates both  membership and mod status as mode has to be a member!
 const mod = async (req, res, next) =>{
+    console.log('Mod premission midlleware:-')
+    //data validation
     const errors = validationResult(req);
     if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
-    const {channelId} = matchedData(req); 
+    const {channelId, id} = matchedData(req); 
     console.log(`user id: ${req.user.id}, connection id: ${channelId}`)
     const result = await prisma.channelMember.findFirst({
         where:{AND:[
@@ -35,10 +37,49 @@ const mod = async (req, res, next) =>{
     if(!result.isMod)res.status(403).json({msg: 'requires mod privillage'})
     next();
 }
+const deletePriv = async( req, res, next) =>{
+    //data validation
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
+    const {channelId, id} = matchedData(req); 
+    //check if author or mod
+    const checkAuthor = async (id) =>{
+        const result = await prisma.message.findUnique({
+            where:{id : Number(id)}
+        })
+        if(!result) return false
+        if(!Number(result.userId) === Number(req.user.id)) return false
+        return true
+    }
+    const checkMod =async (channelId) =>{
+        const result = await prisma.channelMember.findFirst({
+            where:{AND:[
+                    {channelId:Number(channelId)},
+                    {userId: Number(req.user.id)}
+                ]   
+            }
+        })
+        console.log(result)
+        if(!result) return false
+        if(!result.isMember)return false
+        if(!result.isMod)return false
+        return true
+    }
+    try{
+        if(await checkAuthor(Number(id)) || await checkMod(Number(channelId))){
+            return next()
+        } 
+        throw new Error('Unauthorized action!');     
+    }catch(err){
+        return res.status(403).json({msg: `${err}`})
+    }
+
+}
 
 const authorize ={
     author,
-    mod
+    mod,
+    deletePriv
 }
 export{
     authorize

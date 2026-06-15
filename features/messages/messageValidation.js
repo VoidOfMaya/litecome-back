@@ -14,7 +14,8 @@ const editMessage =[
     toInt()
 ]
 const messageId = [
-        body('id').isInt().toInt().withMessage('parent id must be an integed if provided')
+        body('id').isInt().toInt().withMessage('parent id must be an integed if provided'),
+        param('channelId').isInt().toInt().withMessage('parent id must be an integed if provided')
 ]
 const validate ={
     createMessage,
