@@ -26,7 +26,6 @@ const getFriendConnectionbyId = async (req, res) =>{
 }
 const requestFriend = async (req, res) =>{
     // data validation
-    console.log(req.body)
     const errors = validationResult(req);
     if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
     const {recieverId} = matchedData(req); 
@@ -39,6 +38,7 @@ const requestFriend = async (req, res) =>{
     }
 }
 const pendingFriends = async (req, res)=>{
+
     try {
         const pendingRequests = await service.getPendingFriends(Number(req.user.id))
         res.status(200).json(pendingRequests)
