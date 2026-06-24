@@ -47,6 +47,7 @@ const pendingFriends = async (req, res)=>{
     }    
 }
 const acceptFriendRequest = async (req, res) =>{
+    console.log(`accessing request accept controller`)
     // data validation
     const errors = validationResult(req);
     if(!errors.isEmpty()) return res.status(400).json({errors : errors.array()})
@@ -54,7 +55,7 @@ const acceptFriendRequest = async (req, res) =>{
     //main logic
     try {
         //expects a friend req.body.requestId
-        const result = await service.acceptFriendRequest(requestId)
+        const result = await service.acceptFriendRequest(Number(requestId))
         res.status(200).json(result)
     } catch (err) {
         res.status(500).json({msg: err.message || 'Internal Server Error'})
@@ -68,7 +69,7 @@ const rejectFriendRequest = async (req, res) =>{
     //main logic
     try {
         //expects a friend req.body.requestId
-        await service.rejectFriendRequest(requestId)
+        await service.rejectFriendRequest(Number(requestId))
         res.status(200).json({msg: 'friend request rejected!'})
     } catch (err) {
         res.status(500).json({msg: err.message || 'Internal Server Error'})

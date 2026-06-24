@@ -28,6 +28,7 @@ const populateDashboard = async (userId) =>{
         }
         /**/
     })
+    console.log('unsanitized data: ')
     console.log(result)
     const sanitizedUserData = () =>{
         return {id: result.id, name: result.name, bio: result.bio,photo: result.photo}
@@ -60,7 +61,18 @@ const populateDashboard = async (userId) =>{
         result.friendsRecieved.forEach(connection =>{
             const friend = connection.user
             //checks for friendship duplication!
-            array.forEach(connection =>{
+            const exists = array.some(connection => connection.id === friend.id);
+            if(!exists){
+                array.push({
+                    channelId: connection.channelId,
+                    id: friend.id,
+                    name: friend.name,
+                    photo: friend.photo,
+                    bio: friend.bio,
+                    onlineStatus: friend.isOnline? friend.isOnline : friend.lastOnline,            
+                })
+            }
+            /*array.forEach(connection =>{
                 if(connection.id === friend.id)return
                 array.push({
                     channelId: connection.channelId,
@@ -70,7 +82,7 @@ const populateDashboard = async (userId) =>{
                     bio: friend.bio,
                     onlineStatus: friend.isOnline? friend.isOnline : friend.lastOnline,
                 })                
-            })
+            })*/
 
             
         })
@@ -83,6 +95,8 @@ const populateDashboard = async (userId) =>{
         friends: sanitizedFriendData()
     } 
     //requires data normalization
+    console.log('Sanetized data:')
+    console.log(outboundData)
     return outboundData
 }
 const getUser= async(id)=>{
