@@ -8,13 +8,14 @@ const member = async (req, res, next) =>{
     console.log(`user id: ${req.user.id}, connection id: ${channelId}`)
     const result = await prisma.channelMember.findFirst({
         where:{AND:[
-                {channelId:channelId},
+                {channelId:Number(channelId)},
                 {userId: Number(req.user.id)}
             ]   
         }
     })
-    if(!result) res.status(404).json({msg: 'connection does not exist'})
-    if(!result.isMember)res.status(403).json({msg: 'Access Denied!'})
+    console.log(result)
+    if(!result) return res.status(404).json({msg: 'connection does not exist'})
+    if(!result.isMember)return res.status(403).json({msg: 'Access Denied!'})
     next();
 }
 //validates both  membership and mod status as mode has to be a member!

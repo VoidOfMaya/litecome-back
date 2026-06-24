@@ -39,9 +39,9 @@ const getChannel = async (req, res) =>{
     //main logic
     try {
         const dm = await service.getChannelbyId(channelId)
-        res.status(200).json(dm)
+        return res.status(200).json(dm)
     } catch (err) {
-        res.status(500).json({error: err.message || 'Internal Server Error'})
+        return res.status(500).json({error: err.message || 'Internal Server Error'})
     }
 }
 const leaveChannel = async (req, res) =>{

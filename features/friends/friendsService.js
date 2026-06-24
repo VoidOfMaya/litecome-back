@@ -83,13 +83,6 @@ const getPendingFriends = async (id) =>{
 }
 //accepts friend requests of status pending(takes friendship record id)
 const acceptFriendRequest = async (recordId) =>{
-    // activates connection
-    const result = await prisma.userFriends.update({
-        where:{id: recordId},
-        data:{
-            status: 'ACTIVE'
-        }
-    })
     //creates a channel per connection
     const channelId = await prisma.channel.create({
         select:{
@@ -100,19 +93,31 @@ const acceptFriendRequest = async (recordId) =>{
             name: 'Direct Messages',
         },
     })
+    // activates connection
+    const result = await prisma.userFriends.update({
+        where:{id: recordId},
+        data:{
+            status: 'ACTIVE',
+            channelId: channelId.id
+
+        }
+    })    
     //joins both users to channel
     await prisma.channelMember.createMany({
         data:[
             {
                 channelId: channelId.id,
-                userId: result.userId
+                userId: result.userId,
+                isMember: true
             },
             {
                 channelId: channelId.id,
-                userId: result.friendId
+                userId: result.friendId,
+                isMember: true
             }
         ]
     })
+
     return {result, channelId}
 }
 //rejects friends request of status pending(deletes request recoord by id)

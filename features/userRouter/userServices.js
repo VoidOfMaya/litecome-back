@@ -72,19 +72,6 @@ const populateDashboard = async (userId) =>{
                     onlineStatus: friend.isOnline? friend.isOnline : friend.lastOnline,            
                 })
             }
-            /*array.forEach(connection =>{
-                if(connection.id === friend.id)return
-                array.push({
-                    channelId: connection.channelId,
-                    id: friend.id,
-                    name: friend.name,
-                    photo: friend.photo,
-                    bio: friend.bio,
-                    onlineStatus: friend.isOnline? friend.isOnline : friend.lastOnline,
-                })                
-            })*/
-
-            
         })
 
         return array
