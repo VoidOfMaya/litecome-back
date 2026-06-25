@@ -69,12 +69,18 @@ const getPendingFriends = async (id) =>{
         },
         select: {
             id: true,
+            status: true,
             friend:{
                 select:{
                     id: true,
                     email: true,
                     name: true,
                     photo: true
+                }
+            },
+            user:{
+                select:{
+                    id: true
                 }
             }
         }
